@@ -31,8 +31,7 @@ Studentas Stud_iv();
 int main (){
     vector<Studentas> Grupe;
     cout<<"kiek studentu grupeje";
-    int m;
-    cin>m;
+    int m; cin>m;
     for (auto z=0; z<n; z++)
         Grupe.push_back(Stud_iv());
     cout<<"Studento info:"<<endl;
