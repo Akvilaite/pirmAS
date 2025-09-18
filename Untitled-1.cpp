@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <ctime>
+#include <fstream>
 
 using std::cout;
 using std::cin;
@@ -17,6 +18,7 @@ using std::right;
 using std::fixed;
 using std::setprecision;
 using std::sort;
+using std::ifstream;
 
 struct Studentas {
     string var;
@@ -28,24 +30,29 @@ struct Studentas {
 };
 
 Studentas Stud_iv(int budas);
+vector<Studentas> Stud_from_file(string fname);
 
 int main() {
     srand(time(0));
-
-    vector<Studentas> Grupe;
-    cout << "Kiek studentu grupeje: ";
-    int m;
-    cin >> m;
+     vector<Studentas> Grupe;
 
     int budas;
     cout << "Pasirinkite pazymiu ivedimo buda:\n";
     cout << "1 - zinomas pazymiu skaicius\n";
     cout << "2 - nezinomas pazymiu skaicius (baigti ENTER x2)\n";
     cout << "3 - generuoti pazymius ir egzamina\n";
+    cout << "4 - nuskaitytiv duomenis is failo\n";
     cin >> budas;
 
-    for (int z = 0; z < m; z++)
-        Grupe.push_back(Stud_iv(budas));
+    if (budas==4){
+        Grupe = Stud_from_file("kursiokai.txt");
+    } else {
+        cout << "Kiek studentu grupeje:";
+        int m;
+        cin >> m;
+        for (int z = 0; z < m; z++)
+            Grupe.push_back(Stud_iv(budas));
+    }
     
     int pasirinkimas;
     cout << "\nPasirinkite galutinio balo skaiciavimo buda:\n";
@@ -91,7 +98,7 @@ Studentas Stud_iv(int budas) {
         cin >> n;
         for (int a = 0; a < n; a++) {
             int laik_paz;
-            cout << a+1 << ": ";
+            cout << pirmas.paz.size() + 1 << ": ";
             cin >> laik_paz;
             pirmas.paz.push_back(laik_paz);
             sum += laik_paz;
@@ -109,10 +116,21 @@ Studentas Stud_iv(int budas) {
                 else continue;
             }
             tuscios = 0;
-            int laik_paz = std::stoi(line);
-            pirmas.paz.push_back(laik_paz);
-            sum += laik_paz;
-        }
+            int laik_paz;
+while (true) {
+    cout << a+1 << ": ";
+    cin >> laik_paz;
+    if (cin.fail() || laik_paz < 1 || laik_paz > 10) {
+        cin.clear();                 
+        cin.ignore(1000, '\n');     
+        cout << "Blogas įvedimas! Įveskite pažymį nuo 1 iki 10.\n";
+        continue;
+    }
+    pirmas.paz.push_back(laik_paz);
+    sum += laik_paz;
+    break;
+}
+
         n = pirmas.paz.size();
     } else if (budas == 3) {
         cout << "Kiek pazymiu sugeneruoti " << pirmas.var << " " << pirmas.pav << ": ";
@@ -151,3 +169,51 @@ Studentas Stud_iv(int budas) {
     return pirmas;
 }
 
+vector<Studentas> Stud_from_file(string fname) {
+    ifstream fd(fname);
+    vector<Studentas> grupe;
+    if (!fd) {
+        cout << "Nepavyko atidaryti failo: " << fname << endl;
+        return grupe;
+    }
+
+    string pav, var;
+    int nd, egz;
+
+    // praleidžiam pirma eilutę (antraštę)
+    string header;
+    std::getline(fd, header);
+
+    while (fd >> var >> pav) {
+        Studentas st;
+        st.pav = pav;
+        st.var = var;
+
+        st.paz.clear();
+        int sum = 0;
+        for (int i = 0; i < 5; i++) {   // visada tiksliai 5 ND
+            fd >> nd;
+            st.paz.push_back(nd);
+            sum += nd;
+        }
+
+        fd >> egz;
+        st.egz = egz;
+
+        // galutinis pagal vidurkį
+        st.galVid = (double)sum / st.paz.size() * 0.4 + egz * 0.6;
+
+        // galutinis pagal medianą
+        sort(st.paz.begin(), st.paz.end());
+        double med;
+        if (st.paz.size() % 2 == 0)
+            med = (st.paz[st.paz.size()/2 - 1] + st.paz[st.paz.size()/2]) / 2.0;
+        else
+            med = st.paz[st.paz.size()/2];
+        st.galMed = med * 0.4 + egz * 0.6;
+
+        grupe.push_back(st);
+    }
+
+    return grupe;
+}
