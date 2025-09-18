@@ -47,7 +47,7 @@ int main() {
     cin >> budas;
 
     if (budas == 4) {
-        Grupe = Stud_from_file("kursiokai.txt");
+        Grupe = Stud_from_file("studentai10000.txt");
     } else {
         cout << "Kiek studentu grupeje: ";
         int m;
