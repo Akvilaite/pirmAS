@@ -45,7 +45,7 @@ int main() {
     cout << "3 - generuoti pazymius ir egzamina\n";
     cout << "4 - nuskaityti duomenis is failo\n";
     cin >> budas;
-
+//failo pavadinimas cia!
     if (budas == 4) {
         Grupe = Stud_from_file("studentai10000.txt");
     } else {
