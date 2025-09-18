@@ -40,19 +40,20 @@ int main() {
     cout << "1 - vidurkis\n2 - mediana\n3 -abu";
     cin >> pasirinkimas;
 
-    cout << setw(10) << left <<"vardas" << setw(15) << "Pavarde" << setw(20) << "Egz.";
+    cout << setw(10) << left <<"Vardas" << setw(15) << "Pavardė";
     if (pasirinkimas == 1 || pasirinkimas == 3)
-       cout << setw(20) << "Galutinis pagal vid.";
+       cout << setw(25) << "Galutinis pagal vid.";
     if (pasirinkimas == 2 || pasirinkimas == 3)
         cout << setw(20) << "Galutinis pagal med.";
     cout << endl;
 
-    cout << "Studento info:" << endl;
+    cout << std::string(70, '-') << endl;
+
     for (auto Past : Grupe) {
-        cout << setw(10) << left << Past.var << "I" << setw(15) << right << Past.pav
+        cout << setw(10) << left << Past.var << setw(15) << left << Past.pav
         << setw(10) << Past.egz;
          if (pasirinkimas == 1 || pasirinkimas == 3)
-            cout << setw(20) << fixed << setprecision(2) << Past.galVid;
+            cout << setw(25) << fixed << setprecision(2) << Past.galVid;
         if (pasirinkimas == 2 || pasirinkimas == 3)
             cout << setw(20) << fixed << setprecision(2) << Past.galMed;
         cout << endl;
