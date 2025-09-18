@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <fstream>
+#include <sstream>
 
 using std::cout;
 using std::cin;
@@ -19,7 +20,7 @@ using std::setprecision;
 using std::sort;
 using std::ifstream;
 using std::getline;
-std::istringstream;
+using std::istringstream;
 
 struct Studentas {
     string var;
@@ -179,7 +180,10 @@ vector<Studentas> Stud_from_file(string fname) {
 
         st.paz = laik;
 
-        st.galVid = (double)sum / st.paz.size() * 0.4 + egz * 0.6;
+        int sum = 0;
+        for (int x : st.paz) sum += x;
+
+        st.galVid = (double)sum / st.paz.size() * 0.4 + st.egz * 0.6;
 
         sort(st.paz.begin(), st.paz.end());
         double med;
@@ -187,7 +191,7 @@ vector<Studentas> Stud_from_file(string fname) {
             med = (st.paz[st.paz.size()/2 - 1] + st.paz[st.paz.size()/2]) / 2.0;
         else
             med = st.paz[st.paz.size()/2];
-        st.galMed = med * 0.4 + egz * 0.6;
+        st.galMed = med * 0.4 + st.egz * 0.6;
 
         grupe.push_back(st);
     }
