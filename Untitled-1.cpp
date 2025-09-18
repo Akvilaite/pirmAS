@@ -18,6 +18,8 @@ using std::fixed;
 using std::setprecision;
 using std::sort;
 using std::ifstream;
+using std::getline;
+std::istringstream;
 
 struct Studentas {
     string var;
@@ -155,25 +157,27 @@ vector<Studentas> Stud_from_file(string fname) {
     }
 
     string header;
-    std::getline(fd, header);
+    getline(fd, header);
     
-    while
-
-    while (fd >> var >> pav) {
+    while (getline(fd, header)) {
+        if(header.empty()) continue;
+    
+        istringstream iss(header);
         Studentas st;
-        st.var = var;  
-        st.pav = pav;
+        iss >> st.var >> st.pav;
 
-        st.paz.clear();
-        int sum = 0;
-        for (int i = 0; i < 5; i++) {  
-            fd >> nd;
-            st.paz.push_back(nd);
-            sum += nd;
+        int paz;
+        vector<int> laik;
+        while(iss >> paz) {
+            laik.push_back(paz);
         }
 
-        fd >> egz;
-        st.egz = egz;
+        if (laik.empty()) continue;
+
+        st.egz = laik.back();
+        laik.pop_back();
+
+        st.paz = laik;
 
         st.galVid = (double)sum / st.paz.size() * 0.4 + egz * 0.6;
 
