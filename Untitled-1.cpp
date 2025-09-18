@@ -58,8 +58,8 @@ int main() {
 
     sort(Grupe.begin(), Grupe.end(), [](const Studentas &a, const Studentas &b) {
     if (a.var == b.var) 
-        return a.pav < b.pav;
-    return a.var < b.var;
+        return a.pav > b.pav;
+    return a.var > b.var;
 });
 
     cout << setw(15) << left << "Vardas"
