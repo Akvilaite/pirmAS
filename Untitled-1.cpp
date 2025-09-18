@@ -56,13 +56,13 @@ int main() {
             Grupe.push_back(Stud_iv(budas));
     }
 
-    cout << setw(10) << left << "Vardas"
-         << setw(15) << "Pavarde"
+    cout << setw(15) << left << "Vardas"
+         << setw(20) << "Pavarde"
          << setw(20) << "Galutinis (Vid.)"
          << setw(20) << "Galutinis (Med.)"
          << endl;
 
-    cout << std::string(70, '-') << endl;
+    cout << std::string(75, '-') << endl;
 
     for (auto Past : Grupe) {
         cout << setw(10) << left << Past.var
