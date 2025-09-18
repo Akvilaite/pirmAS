@@ -14,7 +14,6 @@ using std::string;
 using std::vector;
 using std::setw;
 using std::left;
-using std::right;
 using std::fixed;
 using std::setprecision;
 using std::sort;
@@ -34,51 +33,40 @@ vector<Studentas> Stud_from_file(string fname);
 
 int main() {
     srand(time(0));
-     vector<Studentas> Grupe;
+    vector<Studentas> Grupe;
 
     int budas;
     cout << "Pasirinkite pazymiu ivedimo buda:\n";
     cout << "1 - zinomas pazymiu skaicius\n";
     cout << "2 - nezinomas pazymiu skaicius (baigti ENTER x2)\n";
     cout << "3 - generuoti pazymius ir egzamina\n";
-    cout << "4 - nuskaitytiv duomenis is failo\n";
+    cout << "4 - nuskaityti duomenis is failo\n";
     cin >> budas;
 
-    if (budas==4){
+    if (budas == 4) {
         Grupe = Stud_from_file("kursiokai.txt");
     } else {
-        cout << "Kiek studentu grupeje:";
+        cout << "Kiek studentu grupeje: ";
         int m;
         cin >> m;
         for (int z = 0; z < m; z++)
             Grupe.push_back(Stud_iv(budas));
     }
-    
-    int pasirinkimas;
-    cout << "\nPasirinkite galutinio balo skaiciavimo buda:\n";
-    cout << "1 - vidurkis\n2 - mediana\n3 - abu\n";
-    cin >> pasirinkimas;
 
-    cout << setw(10) << left <<"Vardas" 
-         << setw(15) << "Pavarde" 
-         << setw(10) << "Egz.";
-    if (pasirinkimas == 1 || pasirinkimas == 3)
-       cout << setw(20) << "Galutinis (vid.)";
-    if (pasirinkimas == 2 || pasirinkimas == 3)
-        cout << setw(20) << "Galutinis (med.)";
-    cout << endl;
+    cout << setw(10) << left << "Vardas"
+         << setw(15) << "Pavarde"
+         << setw(20) << "Galutinis (Vid.)"
+         << setw(20) << "Galutinis (Med.)"
+         << endl;
 
     cout << std::string(70, '-') << endl;
 
     for (auto Past : Grupe) {
-        cout << setw(10) << left << Past.var 
-             << setw(15) << Past.pav 
-             << setw(10) << Past.egz;
-         if (pasirinkimas == 1 || pasirinkimas == 3)
-            cout << setw(20) << fixed << setprecision(2) << Past.galVid;
-        if (pasirinkimas == 2 || pasirinkimas == 3)
-            cout << setw(20) << fixed << setprecision(2) << Past.galMed;
-        cout << endl;
+        cout << setw(10) << left << Past.var
+             << setw(15) << Past.pav
+             << setw(20) << fixed << setprecision(2) << Past.galVid
+             << setw(20) << fixed << setprecision(2) << Past.galMed
+             << endl;
     }
 }
 
@@ -98,16 +86,16 @@ Studentas Stud_iv(int budas) {
         cin >> n;
         for (int a = 0; a < n; a++) {
             int laik_paz;
-            cout << pirmas.paz.size() + 1 << ": ";
+            cout << a+1 << ": ";
             cin >> laik_paz;
             pirmas.paz.push_back(laik_paz);
             sum += laik_paz;
         }
     } else if (budas == 2) {
         cout << "Iveskite pazymius (baigti ENTER x2):" << endl;
+        cin.ignore(); 
         string line;
         int tuscios = 0;
-        cin.ignore();
         while (true) {
             std::getline(cin, line);
             if (line.empty()) {
@@ -116,21 +104,10 @@ Studentas Stud_iv(int budas) {
                 else continue;
             }
             tuscios = 0;
-            int laik_paz;
-while (true) {
-    cout << a+1 << ": ";
-    cin >> laik_paz;
-    if (cin.fail() || laik_paz < 1 || laik_paz > 10) {
-        cin.clear();                 
-        cin.ignore(1000, '\n');     
-        cout << "Blogas įvedimas! Įveskite pažymį nuo 1 iki 10.\n";
-        continue;
-    }
-    pirmas.paz.push_back(laik_paz);
-    sum += laik_paz;
-    break;
-}
-
+            int laik_paz = std::stoi(line); 
+            pirmas.paz.push_back(laik_paz);
+            sum += laik_paz;
+        }
         n = pirmas.paz.size();
     } else if (budas == 3) {
         cout << "Kiek pazymiu sugeneruoti " << pirmas.var << " " << pirmas.pav << ": ";
@@ -156,7 +133,7 @@ while (true) {
         pirmas.galVid = double(sum) / double(n) * 0.4 + pirmas.egz * 0.6;
         sort(pirmas.paz.begin(), pirmas.paz.end());
         double med;
-        if(n%2 == 0)
+        if (n % 2 == 0)
             med = (pirmas.paz[n/2 - 1] + pirmas.paz[n/2]) / 2.0;
         else
             med = pirmas.paz[n/2];
@@ -177,21 +154,19 @@ vector<Studentas> Stud_from_file(string fname) {
         return grupe;
     }
 
-    string pav, var;
-    int nd, egz;
-
-    // praleidžiam pirma eilutę (antraštę)
     string header;
     std::getline(fd, header);
+    
+    while
 
     while (fd >> var >> pav) {
         Studentas st;
+        st.var = var;  
         st.pav = pav;
-        st.var = var;
 
         st.paz.clear();
         int sum = 0;
-        for (int i = 0; i < 5; i++) {   // visada tiksliai 5 ND
+        for (int i = 0; i < 5; i++) {  
             fd >> nd;
             st.paz.push_back(nd);
             sum += nd;
@@ -200,10 +175,8 @@ vector<Studentas> Stud_from_file(string fname) {
         fd >> egz;
         st.egz = egz;
 
-        // galutinis pagal vidurkį
         st.galVid = (double)sum / st.paz.size() * 0.4 + egz * 0.6;
 
-        // galutinis pagal medianą
         sort(st.paz.begin(), st.paz.end());
         double med;
         if (st.paz.size() % 2 == 0)
