@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 using std::cout;
 using std::cin;
@@ -19,7 +20,8 @@ struct Studentas {
     string pav;
     vector<int> paz;
     int egz;
-    double gal;
+    double galVid;
+    double galMed;
 };
 
 Studentas Stud_iv();
@@ -31,14 +33,27 @@ int main() {
     cin >> m;
     for (int z = 0; z < m; z++)
         Grupe.push_back(Stud_iv());
+    
+    int pasirinkimas;
+    cout << "Pasirinkite galutinio balo skaiciavimo buda:";
+    cout << "1 - vidurkis\n2 - mediana\n3 -abu";
+    cin >> pasirinkimas;
+
+    cout << setw(10) << left <<"vardas" << set(w) << "Pavarde" << setw(20) << "Egz.";
+    if (pasirinkimas == 1 || pasirinkimas == 3)
+       cout << setw(20 << "Galutinis pagal vid.");
+    if (pasirinkimas == 2 || pasirinkimas == 3)
+        cout << setw(20) << "Galutinis pagal med.";
+    cout << endl;
 
     cout << "Studento info:" << endl;
     for (auto Past : Grupe) {
-        cout << setw(10) << left << Past.var << "I" << setw(15) << right << Past.pav;
-        for (auto& a : Past.paz)
-            cout << setw(3) << a << "I"
-        << setw(10) << fixed << setprecision(2) << Past.gal<< endl;
-    }
+        cout << setw(10) << left << Past.var << "I" << setw(15) << right << Past.pav << Past.egz;
+         if (pasirinkimas == 1 || pasirinkimas == 3)
+            cout << setw(20) << fixed << setprecision(2) << Past.galVid;
+        if (pasirinkimas == 2 || pasirinkimas == 3)
+            cout << setw(20) << fixed << setprecision(2) << Past.galMed;
+        cout << endl;
 }
 
 Studentas Stud_iv() {
@@ -61,5 +76,15 @@ Studentas Stud_iv() {
     cout << "iveskite egz paz.: ";
     cin >> pirmas.egz;
     pirmas.gal = double(sum) / double(n) * 0.4 + pirmas.egz * 0.6;
+
+    sort(pirmas.paz.begin(), pirmas.paz.end());
+    double med;
+    if(n%2 == 0)
+        med = (pirmas.paz[n/2 - 1] + pirmas.paz[n/2]) / 2.0;
+    else
+        med = pirmas.paz[n/2];
+    pirmas.galMed = med * 0.4 + pirmas.egz * 0.6;
+
     return pirmas;
 }
+
