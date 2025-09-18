@@ -14,6 +14,7 @@ using std::left;
 using std::right;
 using std::fixed;
 using std::setprecision;
+using std::sort;
 
 struct Studentas {
     string var;
@@ -48,7 +49,8 @@ int main() {
 
     cout << "Studento info:" << endl;
     for (auto Past : Grupe) {
-        cout << setw(10) << left << Past.var << "I" << setw(15) << right << Past.pav << Past.egz;
+        cout << setw(10) << left << Past.var << "I" << setw(15) << right << Past.pav
+        << setw(10) << Past.egz;
          if (pasirinkimas == 1 || pasirinkimas == 3)
             cout << setw(20) << fixed << setprecision(2) << Past.galVid;
         if (pasirinkimas == 2 || pasirinkimas == 3)
@@ -56,9 +58,7 @@ int main() {
         cout << endl;
     }
 }
-
 Studentas Stud_iv() {
-    int n, laik_paz, sum = 0;
     cout << "sveiki" << endl;
     Studentas pirmas;
     cout << "iveskite savo duomenis" << endl;
@@ -66,28 +66,45 @@ Studentas Stud_iv() {
     cin >> pirmas.var;
     cout << "pavarde: ";
     cin >> pirmas.pav;
-    cout << "kiek pazymiu turi " << pirmas.var << " " << pirmas.pav << ": ";
-    cin >> n;
+    cin.ignore();
 
-    for (int a = 0; a < n; a++) {
-        cout << a + 1 << ": ";
-        cin >> laik_paz;
+    cout << "iveskite pazymius (baigti - du kartus ENTER):" << endl;
+    string line;
+    int sum = 0;  
+    int tuscios = 0;
+
+    while (true) {
+        std::getline(cin, line);
+        if (line.empty()) {
+            tuscios++;
+            if (tuscios >= 2) break;
+            else continue;
+        }
+        tuscios = 0;
+        int laik_paz = std::stoi(line);
         pirmas.paz.push_back(laik_paz);
         sum += laik_paz;
     }
 
     cout << "iveskite egz paz.: ";
     cin >> pirmas.egz;
+    cin.ignore();
+    
+    int n = pirmas.paz.size();
+    if (n > 0) {
+        pirmas.galVid = double(sum) / double(n) * 0.4 + pirmas.egz * 0.6;
 
-    pirmas.galVid = double(sum) / double(n) * 0.4 + pirmas.egz * 0.6;
-
-    sort(pirmas.paz.begin(), pirmas.paz.end());
-    double med;
-    if(n%2 == 0)
-        med = (pirmas.paz[n/2 - 1] + pirmas.paz[n/2]) / 2.0;
-    else
-        med = pirmas.paz[n/2];
-    pirmas.galMed = med * 0.4 + pirmas.egz * 0.6;
+        sort(pirmas.paz.begin(), pirmas.paz.end());
+        double med;
+        if(n%2 == 0)
+         med = (pirmas.paz[n/2 - 1] + pirmas.paz[n/2]) / 2.0;
+        else
+          med = pirmas.paz[n/2];
+         pirmas.galMed = med * 0.4 + pirmas.egz * 0.6;
+    } else {
+        pirmas.galVid = pirmas.egz * 0.6;
+        pirmas.galMed = pirmas.egz * 0.6;
+    }
 
     return pirmas;
 }
