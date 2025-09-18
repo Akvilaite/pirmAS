@@ -39,9 +39,9 @@ int main() {
     cout << "1 - vidurkis\n2 - mediana\n3 -abu";
     cin >> pasirinkimas;
 
-    cout << setw(10) << left <<"vardas" << set(w) << "Pavarde" << setw(20) << "Egz.";
+    cout << setw(10) << left <<"vardas" << setw(15) << "Pavarde" << setw(20) << "Egz.";
     if (pasirinkimas == 1 || pasirinkimas == 3)
-       cout << setw(20 << "Galutinis pagal vid.");
+       cout << setw(20) << "Galutinis pagal vid.";
     if (pasirinkimas == 2 || pasirinkimas == 3)
         cout << setw(20) << "Galutinis pagal med.";
     cout << endl;
@@ -54,6 +54,7 @@ int main() {
         if (pasirinkimas == 2 || pasirinkimas == 3)
             cout << setw(20) << fixed << setprecision(2) << Past.galMed;
         cout << endl;
+    }
 }
 
 Studentas Stud_iv() {
@@ -67,15 +68,18 @@ Studentas Stud_iv() {
     cin >> pirmas.pav;
     cout << "kiek pazymiu turi " << pirmas.var << " " << pirmas.pav << ": ";
     cin >> n;
+
     for (int a = 0; a < n; a++) {
         cout << a + 1 << ": ";
         cin >> laik_paz;
         pirmas.paz.push_back(laik_paz);
         sum += laik_paz;
     }
+
     cout << "iveskite egz paz.: ";
     cin >> pirmas.egz;
-    pirmas.gal = double(sum) / double(n) * 0.4 + pirmas.egz * 0.6;
+
+    pirmas.galVid = double(sum) / double(n) * 0.4 + pirmas.egz * 0.6;
 
     sort(pirmas.paz.begin(), pirmas.paz.end());
     double med;
