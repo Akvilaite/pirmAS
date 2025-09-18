@@ -11,6 +11,8 @@ using std::vector;
 using std::setw;
 using std::left;
 using std::right;
+using std::fixed;
+using std::setprecision;
 
 struct Studentas {
     string var;
@@ -34,8 +36,8 @@ int main() {
     for (auto Past : Grupe) {
         cout << setw(10) << left << Past.var << "I" << setw(15) << right << Past.pav;
         for (auto& a : Past.paz)
-            cout << setw(3) << a << "I";
-        cout << setw(5) << Past.egz << "I" << setw(10) << Past.gal << endl;
+            cout << setw(3) << a << "I"
+        << setw(10) << fixed << setprecision(2) << Past.gal<< endl;
     }
 }
 
