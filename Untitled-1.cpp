@@ -56,6 +56,12 @@ int main() {
             Grupe.push_back(Stud_iv(budas));
     }
 
+    sort(Grupe.begin(), Grupe.end(), [](const Studentas &a, const Studentas &b) {
+    if (a.var == b.var) 
+        return a.pav < b.pav;
+    return a.var < b.var;
+});
+
     cout << setw(15) << left << "Vardas"
          << setw(20) << "Pavarde"
          << setw(20) << "Galutinis (Vid.)"
